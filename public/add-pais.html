@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CADASTRAR PAÍS</title>
+  </head>
+  <body>
+    <form id="formPais">
+      <input type="text" name="nome" placeholder="Nome..." />
+      <input type="text" name="bandeira_url" placeholder="Url da bandeira..." />
+      <select name="grupo" id="grupo">
+        <option value="1">A</option>
+        <option value="2">B</option>
+        <option value="3">C</option>
+        <option value="4">D</option>
+        <option value="5">E</option>
+        <option value="6">F</option>
+        <option value="7">G</option>
+        <option value="8">H</option>
+      </select>
+      <button type="submit">CADASTRAR</button>
+    </form>
+
+    <script>
+      const form = document.getElementById("formPais");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = {
+          nome: form.nome.value,
+          bandeira_url: form.bandeira_url.value,
+          grupo: form.grupo.value,
+        };
+
+        const response = await fetch("/pais", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+        console.log(result);
+        alert("País cadastrado com sucesso!");
+      });
+    </script>
+  </body>
+</html>

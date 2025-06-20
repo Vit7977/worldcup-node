@@ -1,72 +1,29 @@
-import express from "express";
+import express, { Router } from "express";
 import { fileURLToPath } from "url";
 import path from "path";
-import connection from "../../database/connection.js";
+import PaisController from "../controllers/pais.js";
 
 const router = express.Router();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-router.use(express.static(path.join(__dirname, "../../public")));
+router.use(express.static(path.join(__dirname, "../../../public")));
 
-router.get("/pais", async (req, res) => {
-  await connection.execute(`SELECT * FROM pais`, (error, result) => {
-    if (error) {
-      console.log("Erro" + error.message);
-    }
-    return res.status(200).json(result);
-  });
+router.get("/pais/cadastrar", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../public/add-pais.html"));
 });
 
-router.post("/pais", async (req, res) => {
-  const data = [req.body.nome, req.body.bandeira_url, req.body.grupo];
+router.get("/api/pais", PaisController.getPais);
 
-  try {
-    await connection.execute(
-      `INSERT INTO pais (nome, bandeira_url, fk_grupo) VALUES(?, ?, ?);`,
-      data
-    );
-    return res
-      .status(201)
-      .send("País cadastrado com sucesso! " + JSON.stringify(data));
-  } catch (error) {
-    console.log("Erro:" + error.message);
-    return res.status(500).send("Erro ao cadastrar!");
-  }
+router.get("/pais", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../public/list-pais.html"));
 });
 
-router.put("/pais/:id", async (req, res) => {
-  const data = [
-    req.body.nome,
-    req.body.bandeira_url,
-    req.body.grupo,
-    req.params.id,
-  ];
+router.post("/pais", PaisController.addPais);
 
-  try {
-    await connection.execute(
-      `UPDATE pais SET nome = ?, bandeira_url = ?, fk_grupo = ? WHERE id = ?;`,
-      data
-    );
-    return res
-      .status(200)
-      .send("País atualizado com sucesso! " + JSON.stringify(data));
-  } catch (error) {
-    console.log("Erro:" + error.message);
-    return res.status(500).send("Erro ao atualizar!");
-  }
-});
+router.put("/pais/:id", PaisController.updatePais);
 
-router.delete("/pais/:id", async (req, res) => {
-  const id = [req.params.id];
-  try {
-    await connection.execute(`DELETE FROM pais WHERE id = ?`, id);
-    return res.status(200).send("Id " + id + " foi deletado com sucesso!");
-  } catch (error) {
-    console.log("Erro:" + error.message);
-    return res.status(500).send("Erro ao deletar!");
-  }
-});
+router.delete("/pais/:id", PaisController.deletePais);
 
 export default router;

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>País</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <h1>Países</h1>
+    <table id="tabelaPais">
+      <tr>
+        <td></td>
+        <td>PAÍS</td>
+        <td>GRUPO ID</td>
+        <td></td>
+      </tr>
+    </table>
+    <script>
+      async function loadPaises() {
+        const response = await fetch("/api/pais");
+        const paises = await response.json();
+
+        const table = document.getElementById("tabelaPais");
+        table.innerHTML = "";
+
+        table.innerHTML = `<tr>
+        <td></td>
+        <td>PAÍS</td>
+        <td>GRUPO ID</td>
+        <td></td>
+      </tr>`;
+
+        paises.forEach((pais) => {
+          const linha = document.createElement("tr");
+          linha.innerHTML = `
+          <td><img src="${pais.bandeira_url}" alt="bandeira_${pais.nome}"/></td>
+            <td>${pais.nome}</td>
+            <td>${pais.fk_grupo}</td>
+            <td>
+              <a href="/pais/${pais.id}"><button><i class="fa-solid fa-pen-to-square"></i></button></a>
+              <a href="/pais/${pais.id}"><button><i class="fa-solid fa-trash"></i></button></a>
+          </td>
+          `;
+          table.appendChild(linha);
+        });
+      }
+
+      loadPaises();
+    </script>
+  </body>
+</html>

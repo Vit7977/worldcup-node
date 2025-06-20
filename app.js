@@ -3,8 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import paisRouter from "./src/routes/pais.js";
 
-export const raizProjeto = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(raizProjeto);
+export const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 9090;
