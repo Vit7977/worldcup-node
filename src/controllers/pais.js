@@ -11,6 +11,28 @@ const PaisController = {
     });
   },
 
+  async getPaisID(req, res) {
+    const id = [req.params.id];
+    try {
+      await connection.execute(
+        `SELECT * FROM pais WHERE id = ?`,
+        id,
+        (error, result) => {
+          if (error) {
+            console.log("Erro:" + error.message);
+          }
+          return res.status(200).json({
+            message: "Consultando o país de Id:" + id,
+            data: result,
+          });
+        }
+      );
+    } catch (error) {
+      console.log("Erro:" + error.message);
+      return res.status(500).send("Erro ao consultar!");
+    }
+  },
+
   async addPais(req, res) {
     const data = [req.body.nome, req.body.bandeira_url, req.body.grupo];
 

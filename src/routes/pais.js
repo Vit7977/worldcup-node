@@ -10,9 +10,11 @@ const __dirname = path.dirname(__filename);
 
 router.use(express.static(path.join(__dirname, "../../../public")));
 
-router.get("/pais/cadastrar", (req, res) => {
+router.get("/pais/add", (req, res) => {
   res.sendFile(path.join(__dirname, "../../public/add-pais.html"));
 });
+
+router.get("/api/pais/:id", PaisController.getPaisID);
 
 router.get("/api/pais", PaisController.getPais);
 
@@ -22,8 +24,13 @@ router.get("/pais", (req, res) => {
 
 router.post("/pais", PaisController.addPais);
 
-router.put("/pais/:id", PaisController.updatePais);
 
-router.delete("/pais/:id", PaisController.deletePais);
+router.put("/api/pais/:id", PaisController.updatePais);
+
+router.get("/pais/edit", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../public/edit-pais.html"));
+});
+
+router.delete("/api/pais/:id", PaisController.deletePais);
 
 export default router;
